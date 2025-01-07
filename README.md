@@ -20,10 +20,10 @@ public class HelloWorld {
         System.out.println("Hello, World!");
     }
 }
-''' 
+```
 
 ## Step 3: Creating a GitHub Actions Workflow
-**1. Create a Workflow File:
+1. **Create a Workflow File:**
 
 In your repository, create a new folder named .github and inside it, another folder named workflows.
 Inside the workflows folder, create a file named security-checks.yml.
@@ -31,6 +31,7 @@ Setting Up the Workflow File:
 
 Open the security-checks.yml file and add the following content:
 
+```yaml
 name: Security Checks
 
 on:
@@ -47,10 +48,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up JDK 11
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           distribution: 'adopt'
           java-version: '11'
@@ -59,20 +60,21 @@ jobs:
         run: |
           curl -LO https://github.com/jeremylong/DependencyCheck/releases/download/v6.5.3/dependency-check-6.5.3-release.zip
           unzip dependency-check-6.5.3-release.zip
-          ./dependency-check/bin/dependency-check.sh --project JavaSecurityCheck --scan ./ --format HTML --out report
+          ./dependency-check/bin/dependency-check.sh --project JavaSecurityCheck --scan ./ --format HTML --out report --disableAssembly -v
 
       - name: Upload Report
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: security-report
           path: report
+```
 
 ## Step 4: Understanding the Workflow
-** Workflow Explanation:
+**Workflow Explanation**:
 - name: Names the workflow "Security Checks".
 - on: Specifies the events that trigger the workflow. In this case, it runs when you push code to the main branch or create a pull request targeting the main branch.
 - jobs: Defines the tasks to be performed. Here, we have a job named security.
-** Job Steps:
+**Job Steps**:
 - runs-on: Specifies the type of machine to run the job on. We use ubuntu-latest.
 - steps: Lists the actions to perform:
  -- actions/checkout@v2: Checks out your code.
@@ -87,7 +89,7 @@ jobs:
 
 
 ## Step 6: Viewing the Results
-  ** Check the Workflow Results:
+  **Check the Workflow Results:**
        - Go to your GitHub repository.
        - Click on the "Actions" tab. You will see the workflow running.
        - Once it completes, you can view the results to see if any security issues were found.
